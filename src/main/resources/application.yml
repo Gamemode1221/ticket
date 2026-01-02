@@ -24,4 +24,5 @@ logging:
     org.hibernate.jdbc.bind: trace
 
 springdoc:
+  # Spring Framework 버전 호환 이슈로 ControllerAdvice 스캔 과정에서 500이 나서 비활성화
   override-with-generic-response: false
