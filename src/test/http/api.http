@@ -1,0 +1,62 @@
+### create
+POST http://localhost:8080/tickets
+Content-Type: application/json
+
+{
+  "title": "첫 티켓",
+  "content": "내용입니다"
+}
+
+### get
+GET http://localhost:8080/tickets/1
+
+### list all
+GET http://localhost:8080/tickets?page=0&size=10&sort=createdAt,desc
+
+### filter by status
+GET http://localhost:8080/tickets?status=OPEN&page=0?size=10&sort=createdAt,desc
+
+### search by keyword
+GET http://localhost:8080/tickets?q=첫&page=0&size=10&sort=createdAt,desc
+
+### status + keyword
+GET http://localhost:8080/tickets?status=OPEN&q=첫&page=0&size=10&sort=createdAt,desc
+
+### update
+PUT http://localhost:8080/tickets/1
+Content-Type: application/json
+
+{
+  "title": "수정된 제목",
+  "content": "수정된 내용"
+}
+
+### empty create
+POST http://localhost:8080/tickets
+Content-Type: application/json
+
+{
+  "title": "",
+  "content": ""
+}
+
+### not found
+GET http://localhost:8080/tickets/999999
+
+### test-req-001
+GET http://localhost:8080/tickets/999999
+X-Request-Id: test-req-001
+
+### status change
+PATCH http://localhost:8080/tickets/1/status
+Content-Type: application/json
+
+{
+  "status": "IN_PROGRESS"
+}
+
+### delete not found -> 404
+DELETE http://localhost:8080/tickets/999999
+
+### delete
+DELETE http://localhost:8080/tickets/1
