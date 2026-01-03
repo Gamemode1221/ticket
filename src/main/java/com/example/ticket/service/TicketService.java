@@ -34,9 +34,25 @@ public class TicketService {
     }
 
     @Transactional(readOnly = true)
-    public Page<Ticket> list(Pageable pageable) {
+    public Page<Ticket> searchAll(Pageable pageable) {
         return ticketRepository.findAll(pageable);
     }
+
+    @Transactional(readOnly = true)
+    public Page<Ticket> searchTicketByStatus(TicketStatus status, Pageable pageable) {
+        return ticketRepository.findByStatus(status, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Ticket> searchTicketsByKeyword(String q, Pageable pageable) {
+        return ticketRepository.findByKeyword(q, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Ticket> searchByStatusAndKeyword(TicketStatus status, String q, Pageable pageable) {
+        return ticketRepository.searchByStatusAndKeyword(status, q, pageable);
+    }
+
 
     public void update(Long id, TicketUpdateRequest req) {
         Ticket t = get(id);
@@ -53,10 +69,5 @@ public class TicketService {
     public void changeStatus(Long id, TicketStatus status) {
         Ticket t = get(id);
         t.changeStatus(status);
-    }
-
-    @Transactional(readOnly = true)
-    public Page<Ticket> search(TicketStatus status, String q, Pageable pageable) {
-        return ticketRepository.search(status, q, pageable);
     }
 }
