@@ -46,6 +46,12 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponse.of("INTERNAL_ERROR", e.getMessage(), request.getRequestURI(), requestId(request)));
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorized(UnauthorizedException e, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ErrorResponse.of("UNAUTHORIZED", e.getMessage(), request.getRequestURI(), requestId(request)));
+    }
+
     private String messageOf(FieldError fe) {
         return fe.getDefaultMessage() != null ? fe.getDefaultMessage() : "invalid";
     }

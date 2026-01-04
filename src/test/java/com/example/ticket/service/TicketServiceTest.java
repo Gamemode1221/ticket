@@ -4,6 +4,7 @@ import com.example.ticket.api.dto.TicketCreateRequest;
 import com.example.ticket.api.error.NotFoundException;
 import com.example.ticket.domain.Ticket;
 import com.example.ticket.domain.TicketRepository;
+import com.example.ticket.domain.TicketStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +18,19 @@ public class TicketServiceTest {
 
     @Autowired TicketService ticketService;
     @Autowired TicketRepository ticketRepository;
+
+    @Test
+    void change_status_success() {
+        TicketCreateRequest req = new TicketCreateRequest();
+        req.title = "t";
+        req.content = "c";
+        Long id = ticketService.create(req);
+
+        ticketService.changeStatus(id, TicketStatus.IN_PROGRESS);
+
+        Ticket t = ticketService.get(id);
+        assertThat(t.getStatus()).isEqualTo(TicketStatus.IN_PROGRESS);
+    }
 
     @Test
     void create_then_get_success() {

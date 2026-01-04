@@ -26,3 +26,9 @@ logging:
 springdoc:
   # Spring Framework 버전 호환 이슈로 ControllerAdvice 스캔 과정에서 500이 나서 비활성화
   override-with-generic-response: false
+
+app:
+  jwt:
+    secret: "470cffea4627999cab79aa282cab12075b732aabe38dcf05068351b0c9663dd4"
+    issuer: "ticket-app"
+    expires-minutes: 60
