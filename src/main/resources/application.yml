@@ -29,6 +29,6 @@ springdoc:
 
 app:
   jwt:
-    secret: "470cffea4627999cab79aa282cab12075b732aabe38dcf05068351b0c9663dd4"
+    secret: "0uiyTBbnRmVw8wm0hSz5eoZ4vt7LCpnuRroC2bmdt9Q="
     issuer: "ticket-app"
     expires-minutes: 60

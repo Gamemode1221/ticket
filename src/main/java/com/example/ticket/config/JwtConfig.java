@@ -16,22 +16,32 @@ import java.util.Base64;
 public class JwtConfig {
 
     private byte[] keyBytes(String secret) {
+        byte[] bytes;
+
         try {
-            return Base64.getDecoder().decode(secret);
+            bytes = Base64.getDecoder().decode(secret);
         } catch (IllegalArgumentException e) {
-            return secret.getBytes(StandardCharsets.UTF_8);
+            bytes = secret.getBytes(StandardCharsets.UTF_8);
         }
+
+        if (bytes.length < 32) {
+            throw new IllegalStateException("JWT secret key must be at least 32 bytes for HS256 (got " + bytes.length + ")");
+        }
+
+        return bytes;
     }
 
     @Bean
     public JwtEncoder jwtEncoder(@Value("${app.jwt.secret}") String secret) {
-        var key = new SecretKeySpec(keyBytes(secret), "HmacSHA256");
-        return new NimbusJwtEncoder(new ImmutableSecret<SecurityContext>(key));
+        byte[] bytes = keyBytes(secret);
+//        var key = new SecretKeySpec(keyBytes(secret), "HMAC");
+        return new NimbusJwtEncoder(new ImmutableSecret<SecurityContext>(bytes));
     }
 
     @Bean
     public JwtDecoder jwtDecoder(@Value("${app.jwt.secret}") String secret) {
-        var key = new SecretKeySpec(keyBytes(secret), "HmacSHA256");
+        byte[] bytes = keyBytes(secret);
+        var key = new SecretKeySpec(bytes, "HMAC");
         return NimbusJwtDecoder.withSecretKey(key).macAlgorithm(MacAlgorithm.HS256).build();
     }
 }

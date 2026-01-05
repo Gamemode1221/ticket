@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.List;
 import java.util.UUID;
 
-@RestControllerAdvice(basePackages = "com.example.ticket.api")
+@RestControllerAdvice(basePackages = "com.example.ticket")
 public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
@@ -39,17 +39,17 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponse.of("VALIDATION_ERROR", "Validation failed", errors, request.getRequestURI(), requestId(request)));
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorized(UnauthorizedException e, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(ErrorResponse.of("UNAUTHORIZED", e.getMessage(), request.getRequestURI(), requestId(request)));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleAny(Exception e, HttpServletRequest request) {
         log.error("Unhandled exception: {} {}", request.getMethod(), request.getRequestURI(), e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ErrorResponse.of("INTERNAL_ERROR", e.getMessage(), request.getRequestURI(), requestId(request)));
-    }
-
-    @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<ErrorResponse> handleUnauthorized(UnauthorizedException e, HttpServletRequest request) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(ErrorResponse.of("UNAUTHORIZED", e.getMessage(), request.getRequestURI(), requestId(request)));
     }
 
     private String messageOf(FieldError fe) {
