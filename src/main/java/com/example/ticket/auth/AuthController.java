@@ -18,4 +18,9 @@ public class AuthController {
         String token = authService.login(req.username, req.password);
         return new TokenResponse(token);
     }
+
+    @PostMapping("/signup")
+    public void signup(@Valid @RequestBody SignupRequest req) {
+        authService.signup(req.username, req.password);
+    }
 }

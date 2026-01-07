@@ -40,6 +40,34 @@ Content-Type: application/json
   "content": ""
 }
 
+### signup
+POST http://localhost:8080/auth/signup
+Content-Type: application/json
+
+{
+  "username": "demo",
+  "password": "demo1234"
+}
+
+### login
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "demo",
+  "password": "demo1234"
+}
+
+### token check
+POST http://localhost:8080/tickets
+Authorization: Bearer <eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJ0aWNrZXQtYXBwIiwic3ViIjoic3RyaW5nIiwiZXhwIjoxNzY3ODAwNzIxLCJpYXQiOjE3Njc3OTcxMjF9.Y87zaaSbDp5vCYpiNfwUZFxTaVzvbsj5qGbuSkW8S5g>
+Content-Type: application/json
+
+{
+  "title": "t",
+  "content": "c"
+}
+
 ### not found
 GET http://localhost:8080/tickets/999999
 
