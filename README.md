@@ -10,3 +10,11 @@ JWT Token이 정상적으로 발급되지 않는 상황이 발생함.<br/><br/>
 3. AuthService.login() 메소드에 JwsHeader 추가 및 리턴값에 header 추가
 4. GlobalExceptionHandler의 UnAuthorizedException 예외 순서 변경
 5. 메소드 추가에 따른 새로운 의존성 추가
+
+<br/><br/><br/>
+
+Docker 실행 방법
+1. docker compose up -d
+2. ./gradlew bootRun --args="--spring.profiles.active=docker"
+3. /auth/signup -> /auth/login 으로 Swagger Authorize 확인
+4. demo 계정 대신, "회원가입 후 로그인"
