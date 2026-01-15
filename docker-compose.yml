@@ -19,9 +19,6 @@ services:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ticketdb
-#      SPRING_DATASOURCE_USERNAME: ticket
-#      SPRING_DATASOURCE_PASSWORD: ticketpw
     depends_on:
       - db
 

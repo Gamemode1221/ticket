@@ -1,8 +1,8 @@
 FROM eclipse-temurin:17-jdk AS build
 WORKDIR /workspace
 COPY . .
-RUN sed -i 's/\r$//' gradlew
-RUN chmod +x gradlew
+#RUN sed -i 's/\r$//' gradlew
+#RUN chmod +x gradlew
 RUN ./gradlew clean bootJar -x test
 
 FROM eclipse-temurin:17-jre
