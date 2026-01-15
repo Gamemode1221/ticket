@@ -1,9 +1,6 @@
 package com.example.ticket.api;
 
-import com.example.ticket.api.dto.TicketCreateRequest;
-import com.example.ticket.api.dto.TicketResponse;
-import com.example.ticket.api.dto.TicketStatusChangeRequest;
-import com.example.ticket.api.dto.TicketUpdateRequest;
+import com.example.ticket.api.dto.*;
 import com.example.ticket.domain.Ticket;
 import com.example.ticket.domain.TicketStatus;
 import com.example.ticket.service.TicketService;
@@ -37,51 +34,61 @@ public class TicketController {
     }
 
     @GetMapping(params = {"!status", "!q"})
-    public Page<TicketResponse> listTickets(
+    public PageResponse<TicketResponse> listTickets(
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
             @ParameterObject Pageable pageable
     ) {
-        return ticketService.searchAll(pageable)
+        var page = ticketService.searchAll(pageable)
                 .map(TicketResponse::from);
+        return PageResponse.from(page);
     }
 
     @GetMapping(params = {"status", "!q"})
-    public Page<TicketResponse> listTicketsByStatus(
+    public PageResponse<TicketResponse> listTicketsByStatus(
             @RequestParam(required = false) TicketStatus status,
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
             @ParameterObject Pageable pageable
     ) {
-        return ticketService.searchTicketByStatus(status, pageable)
+        var page = ticketService.searchTicketByStatus(status, pageable)
                 .map(TicketResponse::from);
+        return PageResponse.from(page);
     }
 
     @GetMapping(params = {"!status", "q"})
-    public Page<TicketResponse> listTicketsByKeyword(
+    public PageResponse<TicketResponse> listTicketsByKeyword(
             @RequestParam(required = false) String q,
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
             @ParameterObject Pageable pageable
     ) {
-        if (q.trim().isEmpty())
-            return ticketService.searchAll(pageable)
-                    .map(TicketResponse::from);
-
-        return ticketService.searchTicketsByKeyword(q, pageable)
+        var page = ticketService.searchTicketsByKeyword(q, pageable)
                 .map(TicketResponse::from);
+
+        if (q.trim().isEmpty()) {
+            page = ticketService.searchAll(pageable)
+                    .map(TicketResponse::from);
+            return PageResponse.from(page);
+        }
+
+        return PageResponse.from(page);
     }
 
     @GetMapping(params = {"status", "q"})
-    public Page<TicketResponse> searchTickets(
+    public PageResponse<TicketResponse> searchTickets(
             @RequestParam(required = false) TicketStatus status,
             @RequestParam(required = false) String q,
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
             @ParameterObject Pageable pageable
     ) {
-        if (q.trim().isEmpty())
-            return ticketService.searchTicketByStatus(status, pageable)
-                    .map(TicketResponse::from);
-
-        return ticketService.searchByStatusAndKeyword(status, q, pageable)
+        var page = ticketService.searchByStatusAndKeyword(status, q, pageable)
                 .map(TicketResponse::from);
+
+        if (q.trim().isEmpty()) {
+            page = ticketService.searchTicketByStatus(status, pageable)
+                    .map(TicketResponse::from);
+            return PageResponse.from(page);
+        }
+
+        return PageResponse.from(page);
     }
 
     @PutMapping("/{id}")
